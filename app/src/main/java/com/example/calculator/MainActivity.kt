@@ -181,7 +181,13 @@ fun handleButtonClick(
         "=" -> {
             // Evaluate the expression
             try {
-                val expression = ExpressionBuilder(inputs).build() // Use inputs directly
+                val expressionString = inputs
+                    // the multiply and divide are not native to android,
+                    // have to specify what these symbols actually mean
+                    .replace("×", "*")
+                    .replace("÷", "/")
+                    .replace("%", "/100")  // interpret % as divide by 100
+                val expression = ExpressionBuilder(expressionString).build() // Use inputs directly
                 val result = expression.evaluate().toString() // Evaluate and get result
                 onUpdateResult(result) // Update the result state
             } catch (e: Exception) {
